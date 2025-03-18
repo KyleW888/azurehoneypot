@@ -3,10 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Honeypot</title>
+    <title>Azure Honeypot Attack Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Azure Honeypot Project!</h1>
-    <p>If you see this, your page is working.</p>
-</body>
-</html>
+    <h1>Welcome to my Azure Honeypot Project</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([20, 0], 2); // Default to world view
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Sample attack data (replace with real data)
+        var attackData = [
+            { lat: 37.7749, lng: -122.4194, info: "Attack from San Francisco" },
+            { lat: 51.5074, lng: -0.1278, info: "Attack from London" },
+            { lat: 35.6895, lng: 139.6917, info: "Attack from Tokyo" }
+        ];
+
+        // Add markers for attacks
+        attackData.forEach(function(attack) {
+            L.marker([attack.lat, attack.lng]).addTo(map)
+                .bindPopup(attack.info);
+        });
