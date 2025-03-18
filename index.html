@@ -14,24 +14,31 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="attackData.js"></script> <!-- Load attack data -->
+
     <script>
-        // Initialize map
-        var map = L.map('map').setView([20, 0], 2); // Default to world view
+        console.log("Initializing map...");
+        var map = L.map('map').setView([20, 0], 2); // Default world view
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Sample attack data (replace with real data)
-        var attackData = [
-            { lat: 37.7749, lng: -122.4194, info: "Attack from San Francisco" },
-            { lat: 51.5074, lng: -0.1278, info: "Attack from London" },
-            { lat: 35.6895, lng: 139.6917, info: "Attack from Tokyo" }
-        ];
+        // Debugging: Check if attackData.js loaded correctly
+        console.log("Checking attackData:", attackData);
 
-        // Add markers for attacks
-        attackData.forEach(function(attack) {
-            L.marker([attack.lat, attack.lng]).addTo(map)
-                .bindPopup(attack.info);
-        });
+        // Ensure attackData is defined before using it
+        if (typeof attackData !== "undefined") {
+            console.log("Adding markers...");
+            attackData.forEach(function(attack) {
+                console.log("Placing marker at:", attack.lat, attack.lng);
+                L.marker([attack.lat, attack.lng]).addTo(map)
+                    .bindPopup(attack.info);
+            });
+        } else {
+            console.error("Error: attackData is not loaded.");
+        }
+    </script>
+</body>
+</html>
