@@ -14,7 +14,7 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="attackData.js"></script> <!-- Load attack data -->
+    <script src="attackData.js"></script> <!-- Load the attack data from attackData.js -->
 
     <script>
         console.log("Initializing map...");
@@ -32,9 +32,16 @@
         if (typeof attackData !== "undefined") {
             console.log("Adding markers...");
             attackData.forEach(function(attack) {
-                console.log("Placing marker at:", attack.lat, attack.lng);
-                L.marker([attack.lat, attack.lng]).addTo(map)
-                    .bindPopup(attack.info);
+                var markerSize = Math.min(attack.count * 2, 30); // Adjust size based on the attack count (up to 30 for visualization)
+                L.circleMarker([attack.lat, attack.lng], {
+                    radius: markerSize, // Marker size based on attack count
+                    fillColor: "red",   // Color of the marker
+                    color: "white",     // Border color
+                    weight: 1,
+                    opacity: 0.7,
+                    fillOpacity: 0.5
+                }).addTo(map)
+                    .bindPopup(attack.info); // Info on the marker
             });
         } else {
             console.error("Error: attackData is not loaded.");
