@@ -3,39 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honeypot Attack Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-oLoiDdBr6LPrGaPZzWw8ZDoYmSwsJPeiU2AXDaSLoF3x+GawNhTBTk1E3/3fnGUE" crossorigin=""/>
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; }
-        #map { height: 100vh; width: 100vw; }
-    </style>
+    <title>Azure Honeypot</title>
 </head>
 <body>
-    <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-x9xvUiwU2iE8lA6ZONR3jl1LKvlW+gIkPB/jUIt+4msfD0sdrIZ4WRlT9lm1JgnO" crossorigin=""></script>
-    <script>
-        // Initialize the map (centered globally)
-        var map = L.map('map').setView([20, 0], 2); 
-
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Sample attack data (Replace this with real data)
-        var attackData = [
-            { ip: "192.168.1.1", lat: 40.7128, lon: -74.0060, location: "New York, USA" },
-            { ip: "203.0.113.5", lat: 51.5074, lon: -0.1278, location: "London, UK" },
-            { ip: "198.51.100.23", lat: 35.6895, lon: 139.6917, location: "Tokyo, Japan" }
-        ];
-
-        // Add attack markers
-        attackData.forEach(attack => {
-            L.marker([attack.lat, attack.lon])
-                .addTo(map)
-                .bindPopup(`<b>IP:</b> ${attack.ip}<br><b>Location:</b> ${attack.location}`);
-        });
-    </script>
+    <h1>Welcome to My Azure Honeypot Project!</h1>
+    <p>If you see this, your page is working.</p>
 </body>
 </html>
