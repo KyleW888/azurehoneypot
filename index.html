@@ -79,7 +79,7 @@
 
         attackData.forEach(function(attack) {
             // Adjust circle size based on attack frequency
-            var markerSize = Math.max(attack.frequency / 3000, 7);  // Smaller default size, scales up with frequency
+            var markerSize = Math.max(attack.frequency / 500, 7);  // Default size is 7, grows quickly with frequency
             var color = `rgb(${255 - Math.min(attack.frequency / 150, 255)}, 0, ${Math.min(attack.frequency / 150, 255)})`; // Hot to cold color scale
 
             L.circleMarker([attack.lat, attack.lng], {
