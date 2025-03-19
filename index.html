@@ -9,8 +9,8 @@
         #map { 
             height: 500px; 
             width: 100%; 
-            border: 5px solid blue; /* Blue border around the map */
-            margin: 0; /* Remove margin */
+            border: 8px solid blue; /* Thicker blue border around the map */
+            margin: 0; 
             padding-top: 0;
             padding-bottom: 0;
         }
@@ -27,7 +27,7 @@
             background-color: #6a1b9a;  /* Purple header background */
             padding: 20px;
             border-radius: 5px 5px 0 0;
-            border: none; /* Remove border */
+            border: none;
         }
         footer {
             text-align: center;
@@ -37,7 +37,7 @@
             background-color: #6a1b9a; /* Purple footer background */
             padding: 10px;
             border-radius: 0 0 5px 5px;
-            border: none; /* Remove border */
+            border: none;
         }
         .leaflet-popup-content {
             font-size: 14px;
@@ -75,7 +75,7 @@
 
         attackData.forEach(function(attack) {
             // Adjust circle size based on attack frequency
-            var markerSize = Math.max(attack.frequency / 1200, 7);  // Reduce size of default circles, minimum size is 7
+            var markerSize = Math.max(attack.frequency / 1200, 10);  // Adjust the minimum size of the circles
             var color = `rgb(${255 - Math.min(attack.frequency / 150, 255)}, 0, ${Math.min(attack.frequency / 150, 255)})`; // Hot to cold color scale
 
             L.circleMarker([attack.lat, attack.lng], {
