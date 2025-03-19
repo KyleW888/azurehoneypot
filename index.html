@@ -11,6 +11,8 @@
             width: 100%; 
             border: 5px solid blue; /* Blue border around the map */
             margin: 0; /* Remove margin */
+            padding-top: 0;
+            padding-bottom: 0;
         }
         body {
             font-family: Arial, sans-serif;
@@ -20,7 +22,7 @@
         }
         h1 {
             text-align: center;
-            margin-top: 20px;
+            margin: 0;
             color: #fff;
             background-color: #6a1b9a;  /* Purple header background */
             padding: 20px;
@@ -73,7 +75,7 @@
 
         attackData.forEach(function(attack) {
             // Adjust circle size based on attack frequency
-            var markerSize = Math.min(attack.frequency / 1000, 30);  // Make the size based on frequency (up to a maximum size)
+            var markerSize = Math.max(attack.frequency / 1000, 10);  // Ensure smaller attacks are still visible, adjust minimum size to 10
             var color = `rgb(${255 - Math.min(attack.frequency / 150, 255)}, 0, ${Math.min(attack.frequency / 150, 255)})`; // Hot to cold color scale
 
             L.circleMarker([attack.lat, attack.lng], {
