@@ -16,6 +16,7 @@
         h1 {
             text-align: center;
             margin-top: 20px;
+            color: #333;
         }
         footer {
             text-align: center;
@@ -29,116 +30,54 @@
     </style>
 </head>
 <body>
-    <h1>Honey Pot Visualization - Azure Honeypot Project</h1>
+    <h1>Honey Pot Visualization</h1>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Attack data directly embedded here
         var attackData = [
-            {
-                lat: 52.2298,  // Poland (for IP 149.50.96.98)
-                lng: 21.0118,
-                info: "Attack from Poland (149.50.96.98)",
-                count: 14978
-            },
-            {
-                lat: 52.2298,  // Poland (for IP 95.214.55.202)
-                lng: 21.0118,
-                info: "Attack from Poland (95.214.55.202)",
-                count: 14106
-            },
-            {
-                lat: 22.3193,  // Vietnam (for IP 115.75.106.119)
-                lng: 114.1694,
-                info: "Attack from Vietnam (115.75.106.119)",
-                count: 6216
-            },
-            {
-                lat: 55.7558,  // Russia (for IP 193.37.69.105)
-                lng: 37.6176,
-                info: "Attack from Russia (193.37.69.105)",
-                count: 3918
-            },
-            {
-                lat: 30.0507,  // Egypt (for IP 41.38.56.85)
-                lng: 31.2489,
-                info: "Attack from Egypt (41.38.56.85)",
-                count: 624
-            },
-            {
-                lat: 45.2273,  // India (for IP 45.227.254.153)
-                lng: 75.3061,
-                info: "Attack from India (45.227.254.153)",
-                count: 313
-            },
-            {
-                lat: 41.8781,  // United States (for IP 45.156.129.65)
-                lng: -87.6298,
-                info: "Attack from United States (45.156.129.65)",
-                count: 2
-            },
-            {
-                lat: 45.742,  // South Korea (for IP 141.98.10.54)
-                lng: 126.922,
-                info: "Attack from South Korea (141.98.10.54)",
-                count: 98
-            },
-            {
-                lat: 52.3764,  // Germany (for IP 161.97.72.122)
-                lng: 13.8497,
-                info: "Attack from Germany (161.97.72.122)",
-                count: 26
-            },
-            {
-                lat: -17.743,  // Vanuatu (for IP 147.45.112.182)
-                lng: 168.317,
-                info: "Attack from Vanuatu (147.45.112.182)",
-                count: 4
-            },
-            {
-                lat: 40.7128,  // United States (for IP 154.212.141.173)
-                lng: -74.0060,
-                info: "Attack from United States (154.212.141.173)",
-                count: 2
-            },
-            {
-                lat: 39.7392,  // United States (for IP 211.185.207.14)
-                lng: -104.9903,
-                info: "Attack from United States (211.185.207.14)",
-                count: 2
-            }
+            { lat: 52.2298, lng: 21.0118, info: "Attack from Poland (149.50.96.98)", count: 14978 },
+            { lat: 52.2298, lng: 21.0118, info: "Attack from Poland (95.214.55.202)", count: 14106 },
+            { lat: 22.3193, lng: 114.1694, info: "Attack from Vietnam (115.75.106.119)", count: 6216 },
+            { lat: 55.7558, lng: 37.6176, info: "Attack from Russia (193.37.69.105)", count: 3918 },
+            { lat: 30.0507, lng: 31.2489, info: "Attack from Egypt (41.38.56.85)", count: 624 },
+            { lat: 45.2273, lng: 75.3061, info: "Attack from India (45.227.254.153)", count: 313 },
+            { lat: 41.8781, lng: -87.6298, info: "Attack from United States (45.156.129.65)", count: 2 },
+            { lat: 45.742, lng: 126.922, info: "Attack from South Korea (141.98.10.54)", count: 98 },
+            { lat: 52.3764, lng: 13.8497, info: "Attack from Germany (161.97.72.122)", count: 26 },
+            { lat: -17.743, lng: 168.317, info: "Attack from Vanuatu (147.45.112.182)", count: 4 },
+            { lat: 40.7128, lng: -74.0060, info: "Attack from United States (154.212.141.173)", count: 2 },
+            { lat: 39.7392, lng: -104.9903, info: "Attack from United States (211.185.207.14)", count: 2 }
         ];
 
-        // Initialize the map centered on the world
-        var map = L.map('map').setView([20, 0], 2);
+        var map = L.map('map').setView([20, 0], 2); // Default world view
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Function to scale color based on frequency
+        // Function to determine color based on frequency
         function getColor(count) {
-            return count > 10000 ? 'red' :
-                   count > 5000 ? 'orange' :
-                   count > 1000 ? 'yellow' :
-                   count > 100 ? 'blue' : 'green';
+            return count > 10000 ? '#d73027' : // Red for high frequency
+                count > 5000 ? '#fc8d59' : // Orange for medium-high frequency
+                count > 1000 ? '#fee08b' : // Yellow for medium frequency
+                count > 100 ? '#d9ef8b' : // Light green for low frequency
+                '#91bfdb'; // Blue for very low frequency
         }
 
-        // Add markers to the map based on attack data
+        // Add markers with frequency-based colors
         attackData.forEach(function(attack) {
-            var markerSize = Math.min(Math.log(attack.count) * 3, 30);  // Adjust size based on attack frequency
-            
+            var markerSize = Math.min(attack.count / 500, 30); // Adjust size based on attack count (up to 30 for visualization)
             L.circleMarker([attack.lat, attack.lng], {
                 radius: markerSize,
-                fillColor: getColor(attack.count),  // Color based on attack frequency
-                color: "white",
+                fillColor: getColor(attack.count), // Use the frequency-based color
+                color: 'white',  // Border color
                 weight: 1,
                 opacity: 0.7,
-                fillOpacity: 0.5
+                fillOpacity: 0.6
             }).addTo(map)
-              .bindPopup(attack.info);  // Add popup info
+                .bindPopup(attack.info + "<br>Frequency: " + attack.count); // Show frequency in popup
         });
     </script>
 
