@@ -16,13 +16,19 @@
         h1 {
             text-align: center;
             margin-top: 20px;
-            color: #333;
+            color: #fff;
+            background-color: #6a1b9a;  /* Purple header background */
+            padding: 20px;
+            border-radius: 5px 5px 0 0;
         }
         footer {
             text-align: center;
             margin-top: 30px;
             font-size: 16px;
-            color: #555;
+            color: #fff;
+            background-color: #6a1b9a; /* Purple footer background */
+            padding: 10px;
+            border-radius: 0 0 5px 5px;
         }
         .leaflet-popup-content {
             font-size: 14px;
@@ -36,20 +42,21 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         var attackData = [
-            { lat: 52.2298, lng: 21.0118, info: "Attack from Poland (149.50.96.98)", count: 14978 },
-            { lat: 52.2298, lng: 21.0118, info: "Attack from Poland (95.214.55.202)", count: 14106 },
-            { lat: 22.3193, lng: 114.1694, info: "Attack from Vietnam (115.75.106.119)", count: 6216 },
-            { lat: 55.7558, lng: 37.6176, info: "Attack from Russia (193.37.69.105)", count: 3918 },
-            { lat: 30.0507, lng: 31.2489, info: "Attack from Egypt (41.38.56.85)", count: 624 },
-            { lat: 45.2273, lng: 75.3061, info: "Attack from India (45.227.254.153)", count: 313 },
-            { lat: 41.8781, lng: -87.6298, info: "Attack from United States (45.156.129.65)", count: 2 },
-            { lat: 45.742, lng: 126.922, info: "Attack from South Korea (141.98.10.54)", count: 98 },
-            { lat: 52.3764, lng: 13.8497, info: "Attack from Germany (161.97.72.122)", count: 26 },
-            { lat: -17.743, lng: 168.317, info: "Attack from Vanuatu (147.45.112.182)", count: 4 },
-            { lat: 40.7128, lng: -74.0060, info: "Attack from United States (154.212.141.173)", count: 2 },
-            { lat: 39.7392, lng: -104.9903, info: "Attack from United States (211.185.207.14)", count: 2 }
+            { lat: 54.6916, lng: 25.2874, info: "Attack from Lithuania" },
+            { lat: 10.2502, lng: 105.9651, info: "Attack from Vietnam" },
+            { lat: 22.3193, lng: 114.169, info: "Attack from Hong Kong" },
+            { lat: 48.9742, lng: 8.1851, info: "Attack from France" },
+            { lat: -17.743, lng: 168.317, info: "Attack from Vanuatu" },
+            { lat: 41.8781, lng: -87.6298, info: "Attack from United States" },
+            { lat: 52.1783, lng: 21.0602, info: "Attack from Poland" },
+            { lat: 30.0507, lng: 31.2489, info: "Attack from Egypt" },
+            { lat: 55.7558, lng: 37.6173, info: "Attack from Russia" },
+            { lat: 54.9072, lng: 24.0019, info: "Attack from Lithuania" },
+            { lat: 36.5916, lng: 127.2916, info: "Attack from South Korea" },
+            { lat: 52.2299, lng: 21.0093, info: "Attack from Poland" }
         ];
 
+        console.log("Initializing map...");
         var map = L.map('map').setView([20, 0], 2); // Default world view
 
         // Add OpenStreetMap tiles
@@ -57,27 +64,18 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Function to determine color based on frequency
-        function getColor(count) {
-            return count > 10000 ? '#d73027' : // Red for high frequency
-                count > 5000 ? '#fc8d59' : // Orange for medium-high frequency
-                count > 1000 ? '#fee08b' : // Yellow for medium frequency
-                count > 100 ? '#d9ef8b' : // Light green for low frequency
-                '#91bfdb'; // Blue for very low frequency
-        }
-
-        // Add markers with frequency-based colors
         attackData.forEach(function(attack) {
-            var markerSize = Math.min(attack.count / 500, 30); // Adjust size based on attack count (up to 30 for visualization)
+            // Default size larger for visibility
+            var markerSize = 8;  // Larger default size for all markers
             L.circleMarker([attack.lat, attack.lng], {
-                radius: markerSize,
-                fillColor: getColor(attack.count), // Use the frequency-based color
-                color: 'white',  // Border color
+                radius: markerSize,  // Default size
+                fillColor: "red",
+                color: "white",
                 weight: 1,
                 opacity: 0.7,
-                fillOpacity: 0.6
+                fillOpacity: 0.5
             }).addTo(map)
-                .bindPopup(attack.info + "<br>Frequency: " + attack.count); // Show frequency in popup
+                .bindPopup(attack.info);  // Info on hover
         });
     </script>
 
