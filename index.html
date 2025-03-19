@@ -17,22 +17,33 @@
     <script>
         // Attack data directly in this file
         var attackData = [
-            { lat: 54.6916, lng: 25.2874, info: "Attack from Lithuania" },
-            { lat: 10.2502, lng: 105.9651, info: "Attack from Vietnam" },
-            { lat: 22.3193, lng: 114.169, info: "Attack from Hong Kong" },
-            { lat: 48.9742, lng: 8.1851, info: "Attack from France" },
-            { lat: -17.743, lng: 168.317, info: "Attack from Vanuatu" },
-            { lat: 41.8781, lng: -87.6298, info: "Attack from United States" },
-            { lat: 52.1783, lng: 21.0602, info: "Attack from Poland" },
-            { lat: 30.0507, lng: 31.2489, info: "Attack from Egypt" },
-            { lat: 55.7558, lng: 37.6173, info: "Attack from Russia" },
-            { lat: 54.9072, lng: 24.0019, info: "Attack from Lithuania" },
-            { lat: 36.5916, lng: 127.2916, info: "Attack from South Korea" },
-            { lat: 52.2299, lng: 21.0093, info: "Attack from Poland" }
+            { lat: 54.6916, lng: 25.2874, info: "Attack from Lithuania", freq: 14978 },
+            { lat: 10.2502, lng: 105.9651, info: "Attack from Vietnam", freq: 14106 },
+            { lat: 22.3193, lng: 114.169, info: "Attack from Hong Kong", freq: 6216 },
+            { lat: 48.9742, lng: 8.1851, info: "Attack from France", freq: 3918 },
+            { lat: -17.743, lng: 168.317, info: "Attack from Vanuatu", freq: 624 },
+            { lat: 41.8781, lng: -87.6298, info: "Attack from United States", freq: 313 },
+            { lat: 52.1783, lng: 21.0602, info: "Attack from Poland", freq: 98 },
+            { lat: 30.0507, lng: 31.2489, info: "Attack from Egypt", freq: 26 },
+            { lat: 55.7558, lng: 37.6173, info: "Attack from Russia", freq: 4 },
+            { lat: 54.9072, lng: 24.0019, info: "Attack from Lithuania", freq: 2 },
+            { lat: 36.5916, lng: 127.2916, info: "Attack from South Korea", freq: 2 },
+            { lat: 52.2299, lng: 21.0093, info: "Attack from Poland", freq: 2 }
         ];
 
-        // Debugging: Check if attackData is loaded correctly
-        console.log("Loaded attackData:", attackData);
+        // Function to calculate the color based on frequency
+        function getColor(frequency) {
+            // Use a scale from blue to red (low freq is blue, high freq is red)
+            var minFreq = Math.min(...attackData.map(a => a.freq));  // Get the minimum frequency
+            var maxFreq = Math.max(...attackData.map(a => a.freq));  // Get the maximum frequency
+
+            var ratio = (frequency - minFreq) / (maxFreq - minFreq);  // Normalize to 0-1 range
+
+            var red = Math.min(255, Math.floor(255 * ratio));  // Red increases with frequency
+            var blue = Math.min(255, Math.floor(255 * (1 - ratio)));  // Blue decreases with frequency
+
+            return `rgb(${red}, 0, ${blue})`;  // Return the color
+        }
 
         // Initialize the map
         var map = L.map('map').setView([20, 0], 2);  // Default world view
@@ -42,32 +53,22 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Check if data is in the correct format and add markers
-        if (Array.isArray(attackData) && attackData.length > 0) {
-            attackData.forEach(function(attack) {
-                // Log the attack data before creating the marker
-                console.log("Checking attack data:", attack);
+        // Add markers with custom size and color
+        attackData.forEach(function(attack) {
+            // Calculate size based on frequency (larger for more frequent attacks)
+            var size = Math.min(attack.freq / 500, 30);  // Adjust the scale to fit your map
 
-                // Ensure lat and lng are valid numbers
-                if (!isNaN(attack.lat) && !isNaN(attack.lng)) {
-                    console.log("Adding marker for:", attack);  // Debugging: Log each attack
-
-                    L.circleMarker([attack.lat, attack.lng], {
-                        radius: 10,  // Adjust marker size (can make this dynamic if needed)
-                        fillColor: "red",
-                        color: "white",
-                        weight: 1,
-                        opacity: 0.7,
-                        fillOpacity: 0.5
-                    }).addTo(map)
-                        .bindPopup(attack.info);  // Info popup when clicked
-                } else {
-                    console.error("Invalid coordinates for attack:", attack);
-                }
-            });
-        } else {
-            console.error("No valid attack data available.");
-        }
+            // Add the marker with frequency-based size and color
+            L.circleMarker([attack.lat, attack.lng], {
+                radius: size,
+                fillColor: getColor(attack.freq),  // Set color based on frequency
+                color: "white",  // Border color
+                weight: 1,
+                opacity: 0.7,
+                fillOpacity: 0.5
+            }).addTo(map)
+                .bindPopup(attack.info + "<br>Frequency: " + attack.freq);  // Show info and frequency on hover
+        });
     </script>
 </body>
 </html>
