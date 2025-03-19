@@ -23,6 +23,9 @@
             font-size: 16px;
             color: #555;
         }
+        .leaflet-popup-content {
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -36,67 +39,74 @@
             {
                 lat: 52.2298,  // Poland (for IP 149.50.96.98)
                 lng: 21.0118,
-                info: "Attack from Poland (149.50.96.98)"
+                info: "Attack from Poland (149.50.96.98)",
+                count: 14978
             },
             {
                 lat: 52.2298,  // Poland (for IP 95.214.55.202)
                 lng: 21.0118,
-                info: "Attack from Poland (95.214.55.202)"
+                info: "Attack from Poland (95.214.55.202)",
+                count: 14106
             },
             {
                 lat: 22.3193,  // Vietnam (for IP 115.75.106.119)
                 lng: 114.1694,
-                info: "Attack from Vietnam (115.75.106.119)"
+                info: "Attack from Vietnam (115.75.106.119)",
+                count: 6216
             },
             {
                 lat: 55.7558,  // Russia (for IP 193.37.69.105)
                 lng: 37.6176,
-                info: "Attack from Russia (193.37.69.105)"
+                info: "Attack from Russia (193.37.69.105)",
+                count: 3918
             },
             {
                 lat: 30.0507,  // Egypt (for IP 41.38.56.85)
                 lng: 31.2489,
-                info: "Attack from Egypt (41.38.56.85)"
+                info: "Attack from Egypt (41.38.56.85)",
+                count: 624
             },
             {
                 lat: 45.2273,  // India (for IP 45.227.254.153)
                 lng: 75.3061,
-                info: "Attack from India (45.227.254.153)"
+                info: "Attack from India (45.227.254.153)",
+                count: 313
             },
             {
                 lat: 41.8781,  // United States (for IP 45.156.129.65)
                 lng: -87.6298,
-                info: "Attack from United States (45.156.129.65)"
+                info: "Attack from United States (45.156.129.65)",
+                count: 2
             },
             {
                 lat: 45.742,  // South Korea (for IP 141.98.10.54)
                 lng: 126.922,
-                info: "Attack from South Korea (141.98.10.54)"
+                info: "Attack from South Korea (141.98.10.54)",
+                count: 98
             },
             {
                 lat: 52.3764,  // Germany (for IP 161.97.72.122)
                 lng: 13.8497,
-                info: "Attack from Germany (161.97.72.122)"
+                info: "Attack from Germany (161.97.72.122)",
+                count: 26
             },
             {
                 lat: -17.743,  // Vanuatu (for IP 147.45.112.182)
                 lng: 168.317,
-                info: "Attack from Vanuatu (147.45.112.182)"
+                info: "Attack from Vanuatu (147.45.112.182)",
+                count: 4
             },
             {
                 lat: 40.7128,  // United States (for IP 154.212.141.173)
                 lng: -74.0060,
-                info: "Attack from United States (154.212.141.173)"
+                info: "Attack from United States (154.212.141.173)",
+                count: 2
             },
             {
                 lat: 39.7392,  // United States (for IP 211.185.207.14)
                 lng: -104.9903,
-                info: "Attack from United States (211.185.207.14)"
-            },
-            {
-                lat: 40.7128,  // United States (for IP 45.156.129.65)
-                lng: -74.0060,
-                info: "Attack from United States (45.156.129.65)"
+                info: "Attack from United States (211.185.207.14)",
+                count: 2
             }
         ];
 
@@ -108,13 +118,21 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        // Function to scale color based on frequency
+        function getColor(count) {
+            return count > 10000 ? 'red' :
+                   count > 5000 ? 'orange' :
+                   count > 1000 ? 'yellow' :
+                   count > 100 ? 'blue' : 'green';
+        }
+
         // Add markers to the map based on attack data
         attackData.forEach(function(attack) {
-            var markerSize = Math.min(Math.log(attack.info.split(" ")[3]) * 3, 30);  // Adjust size based on attack frequency
+            var markerSize = Math.min(Math.log(attack.count) * 3, 30);  // Adjust size based on attack frequency
             
             L.circleMarker([attack.lat, attack.lng], {
                 radius: markerSize,
-                fillColor: "red",
+                fillColor: getColor(attack.count),  // Color based on attack frequency
                 color: "white",
                 weight: 1,
                 opacity: 0.7,
