@@ -21,7 +21,7 @@ This project visualizes cyber attack data collected from a honeypot, which was d
 2. **Data Collection**: Attack data is gathered using **Azure Sentinel** and **Log Analytics**.
 3. **Data Querying**: Queries are run using **KQL** to retrieve the attack data.
 4. **Visualization**: The data is visualized on a map, showing the frequency and location of attacks.
-5. **The data collected from VM was from a 12-hour simulation.
+5. The data collected from VM was from a 12-hour simulation.
 
 ## MAP
 
