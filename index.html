@@ -37,6 +37,12 @@
             border-radius: 0; /* Remove border radius to make it flush */
             border: none;
         }
+        .footer-note {
+            text-align: center;
+            font-style: italic;
+            font-size: 12px;
+            margin-top: 10px;
+        }
         .leaflet-popup-content {
             font-size: 14px;
         }
@@ -73,7 +79,7 @@
 
         attackData.forEach(function(attack) {
             // Adjust circle size based on attack frequency
-            var markerSize = Math.min(Math.max(attack.frequency / 5000, 5), 30);  // Default size is 5, max size is 30
+            var markerSize = Math.max(attack.frequency / 3000, 7);  // Smaller default size, scales up with frequency
             var color = `rgb(${255 - Math.min(attack.frequency / 150, 255)}, 0, ${Math.min(attack.frequency / 150, 255)})`; // Hot to cold color scale
 
             L.circleMarker([attack.lat, attack.lng], {
@@ -91,5 +97,9 @@
     <footer>
         <p>By Kyle Wu</p>
     </footer>
+
+    <div class="footer-note">
+        <p><i>Data collected from a 12-hour honeypot session.</i></p>
+    </div>
 </body>
 </html>
