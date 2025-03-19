@@ -31,6 +31,9 @@
             { lat: 52.2299, lng: 21.0093, info: "Attack from Poland" }
         ];
 
+        // Debugging: Check if attackData is loaded correctly
+        console.log("Loaded attackData:", attackData);
+
         // Initialize the map
         var map = L.map('map').setView([20, 0], 2);  // Default world view
 
@@ -39,19 +42,29 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Add markers from attackData
-        attackData.forEach(function(attack) {
-            var markerSize = Math.min(attack.count * 2, 30);  // Adjust size based on attack count (up to 30)
-            L.circleMarker([attack.lat, attack.lng], {
-                radius: markerSize,  // Marker size based on attack count
-                fillColor: "red",    // Color of the marker
-                color: "white",      // Border color
-                weight: 1,
-                opacity: 0.7,
-                fillOpacity: 0.5
-            }).addTo(map)
-                .bindPopup(attack.info);  // Info on the marker
-        });
+        // Check if data is in the correct format and add markers
+        if (Array.isArray(attackData) && attackData.length > 0) {
+            attackData.forEach(function(attack) {
+                console.log("Adding marker for:", attack);  // Debugging: Log each attack
+
+                // Ensure lat and lng are numbers
+                if (typeof attack.lat === 'number' && typeof attack.lng === 'number') {
+                    L.circleMarker([attack.lat, attack.lng], {
+                        radius: 10,  // Adjust marker size (can make this dynamic if needed)
+                        fillColor: "red",
+                        color: "white",
+                        weight: 1,
+                        opacity: 0.7,
+                        fillOpacity: 0.5
+                    }).addTo(map)
+                        .bindPopup(attack.info);  // Info popup when clicked
+                } else {
+                    console.error("Invalid coordinates for attack:", attack);
+                }
+            });
+        } else {
+            console.error("No valid attack data available.");
+        }
     </script>
 </body>
 </html>
