@@ -45,10 +45,13 @@
         // Check if data is in the correct format and add markers
         if (Array.isArray(attackData) && attackData.length > 0) {
             attackData.forEach(function(attack) {
-                console.log("Adding marker for:", attack);  // Debugging: Log each attack
+                // Log the attack data before creating the marker
+                console.log("Checking attack data:", attack);
 
-                // Ensure lat and lng are numbers
-                if (typeof attack.lat === 'number' && typeof attack.lng === 'number') {
+                // Ensure lat and lng are valid numbers
+                if (!isNaN(attack.lat) && !isNaN(attack.lng)) {
+                    console.log("Adding marker for:", attack);  // Debugging: Log each attack
+
                     L.circleMarker([attack.lat, attack.lng], {
                         radius: 10,  // Adjust marker size (can make this dynamic if needed)
                         fillColor: "red",
