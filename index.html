@@ -9,7 +9,6 @@
         #map { 
             height: 500px; 
             width: 100%; 
-            border: 8px solid blue; /* Thicker blue border around the map */
             margin: 0; 
             padding: 0; /* Ensure no padding */
         }
@@ -44,7 +43,7 @@
     </style>
 </head>
 <body>
-    <h1>Honey Pot Visualization</h1>
+    <h1>Honey Pot Map Visualization</h1>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -74,7 +73,7 @@
 
         attackData.forEach(function(attack) {
             // Adjust circle size based on attack frequency
-            var markerSize = Math.max(attack.frequency / 1200, 10);  // Adjust the minimum size of the circles
+            var markerSize = Math.max(attack.frequency / 3000, 5);  // Smaller default size, scales up with frequency
             var color = `rgb(${255 - Math.min(attack.frequency / 150, 255)}, 0, ${Math.min(attack.frequency / 150, 255)})`; // Hot to cold color scale
 
             L.circleMarker([attack.lat, attack.lng], {
