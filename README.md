@@ -25,5 +25,5 @@ This project visualizes cyber attack data collected from a honeypot, which was d
 
 ## MAP
 
-The interactive visualization can be accessed here: [Honeypot Visualization Demo](https://kylew888.github.io/azurehoneypot/).
+The visualization can be accessed here: [Honeypot Visualization Demo](https://kylew888.github.io/azurehoneypot/).
 
