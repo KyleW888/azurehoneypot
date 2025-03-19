@@ -6,139 +6,76 @@
     <title>Azure Honeypot Attack Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        /* Global Styles */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
+            background-color: #f4f4f4;
         }
-
-        /* Header Styling */
-        h1 {
+        header {
+            background-color: #333;
+            color: white;
             text-align: center;
             padding: 20px;
-            background-color: #005d5d;
-            color: white;
-            margin-bottom: 10px;
         }
-
-        /* Container for the Map */
-        #map {
-            height: 500px;
-            width: 100%;
-            margin: 0 auto;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        #map { 
+            height: 500px; 
+            width: 100%; 
+            margin-top: 20px;
         }
-
-        /* Footer Styling */
         footer {
             text-align: center;
             padding: 10px;
-            background-color: #005d5d;
+            background-color: #333;
             color: white;
             margin-top: 20px;
         }
-
-        /* Info Box Styling (Popup Content) */
-        .leaflet-popup-content {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .leaflet-popup-tip {
-            border-color: #333;
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5em;
-            }
-
-            #map {
-                height: 400px;
-            }
-        }
-
-        /* Add some padding and margin around elements */
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to my Azure Honeypot Project</h1>
-        <div id="map"></div>
-    </div>
+    <header>
+        <h1>Welcome to the Honeypot Attack Visualization</h1>
+    </header>
+
+    <div id="map"></div>
 
     <footer>
-        <p>&copy; 2025 Azure Honeypot Project | All Rights Reserved</p>
+        <p>&copy; 2025 Honeypot Project | By Kyle Wu</p>
     </footer>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="attackData.js"></script> <!-- Load the attack data from attackData.js -->
+
     <script>
-        // Attack data directly in this file
-        var attackData = [
-            { lat: 54.6916, lng: 25.2874, info: "Attack from Lithuania", freq: 14978 },
-            { lat: 10.2502, lng: 105.9651, info: "Attack from Vietnam", freq: 14106 },
-            { lat: 22.3193, lng: 114.169, info: "Attack from Hong Kong", freq: 6216 },
-            { lat: 48.9742, lng: 8.1851, info: "Attack from France", freq: 3918 },
-            { lat: -17.743, lng: 168.317, info: "Attack from Vanuatu", freq: 624 },
-            { lat: 41.8781, lng: -87.6298, info: "Attack from United States", freq: 313 },
-            { lat: 52.1783, lng: 21.0602, info: "Attack from Poland", freq: 98 },
-            { lat: 30.0507, lng: 31.2489, info: "Attack from Egypt", freq: 26 },
-            { lat: 55.7558, lng: 37.6173, info: "Attack from Russia", freq: 4 },
-            { lat: 54.9072, lng: 24.0019, info: "Attack from Lithuania", freq: 2 },
-            { lat: 36.5916, lng: 127.2916, info: "Attack from South Korea", freq: 2 },
-            { lat: 52.2299, lng: 21.0093, info: "Attack from Poland", freq: 2 }
-        ];
-
-        // Function to calculate the color based on frequency
-        function getColor(frequency) {
-            var minFreq = Math.min(...attackData.map(a => a.freq));  // Get the minimum frequency
-            var maxFreq = Math.max(...attackData.map(a => a.freq));  // Get the maximum frequency
-
-            var ratio = (frequency - minFreq) / (maxFreq - minFreq);  // Normalize to 0-1 range
-
-            var red = Math.min(255, Math.floor(255 * ratio));  // Red increases with frequency
-            var blue = Math.min(255, Math.floor(255 * (1 - ratio)));  // Blue decreases with frequency
-
-            return `rgb(${red}, 0, ${blue})`;  // Return the color
-        }
-
-        // Initialize the map
-        var map = L.map('map').setView([20, 0], 2);  // Default world view
+        console.log("Initializing map...");
+        var map = L.map('map').setView([20, 0], 2); // Default world view
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Add markers with custom size and color
-        attackData.forEach(function(attack) {
-            // Calculate size based on frequency, with a minimum size for visibility
-            var size = Math.max(5, Math.min(attack.freq / 500, 30));  // Ensure minimum size for visibility
+        // Debugging: Check if attackData.js loaded correctly
+        console.log("Checking attackData:", attackData);
 
-            // Add the marker with frequency-based size and color
-            L.circleMarker([attack.lat, attack.lng], {
-                radius: size,  // Size based on frequency
-                fillColor: getColor(attack.freq),  // Color based on frequency
-                color: "white",  // Border color
-                weight: 1,
-                opacity: 0.7,
-                fillOpacity: 0.5
-            }).addTo(map)
-                .bindPopup(attack.info + "<br>Frequency: " + attack.freq);  // Show info and frequency on hover
-        });
+        // Ensure attackData is defined before using it
+        if (typeof attackData !== "undefined") {
+            console.log("Adding markers...");
+            attackData.forEach(function(attack) {
+                var markerSize = Math.min(attack.count * 2, 30); // Adjust size based on the attack count (up to 30 for visualization)
+                L.circleMarker([attack.lat, attack.lng], {
+                    radius: markerSize, // Marker size based on attack count
+                    fillColor: "red",   // Color of the marker
+                    color: "white",     // Border color
+                    weight: 1,
+                    opacity: 0.7,
+                    fillOpacity: 0.5
+                }).addTo(map)
+                    .bindPopup(attack.info); // Info on the marker
+            });
+        } else {
+            console.error("Error: attackData is not loaded.");
+        }
     </script>
 </body>
 </html>
